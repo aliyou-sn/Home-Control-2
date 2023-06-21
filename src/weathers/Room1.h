@@ -5,11 +5,11 @@
 #define DHTPIN 4
 #define DHTTYPE DHT11   
 DHT dht1(DHTPIN, DHTTYPE);
-
+float h1,t1;
 void readweather1(void *parameter){
     for(;;){
-        float h1 = dht1.readHumidity();
-        float t1 = dht1.readTemperature();
+        h1 = dht1.readHumidity();
+        t1 = dht1.readTemperature();
 
         if (isnan(h1) || isnan(t1)) {
             Serial.println(F("Failed to read from DHT sensor!"));
