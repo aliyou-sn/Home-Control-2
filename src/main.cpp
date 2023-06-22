@@ -15,8 +15,8 @@
 #define RELAY_NO    false
 
 
-const char* ssid = "Aliyu";
-const char* password = "macbooker";
+const char* ssid = "Now";
+const char* password = "123456789";
 const char* PARAM_INPUT_1 = "relay";  
 const char* PARAM_INPUT_2 = "state";
 
@@ -35,53 +35,69 @@ void light4();
 
 
 const char index_html[] PROGMEM = R"rawliteral(
-  <!DOCTYPE HTML><html>
+<!DOCTYPE HTML><html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-  <style>
-    html {
-     font-family: Arial;
-     display: inline-block;
-     margin: 0px auto;
-     text-align: center;
-    }
-    h2 { font-size: 3.0rem; }
-    p { font-size: 3.0rem; }
-    .units { font-size: 1.2rem; }
-    .dht-labels{
-      font-size: 1.5rem;
-      vertical-align:middle;
-      padding-bottom: 15px;
-    }
-  body {max-width: 600px; margin:0px auto; padding-bottom: 25px;}
-  .switch {position: relative; display: inline-block; width: 120px; height: 68px} 
-  .switch input {display: none}
-  .slider {position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 34px}
-  .slider:before {position: absolute; content: ""; height: 52px; width: 52px; left: 8px; bottom: 8px; background-color: #fff; -webkit-transition: .4s; transition: .4s; border-radius: 68px}
-  input:checked+.slider {background-color: #2196F3}
-  input:checked+.slider:before {-webkit-transform: translateX(52px); -ms-transform: translateX(52px); transform: translateX(52px)}
-  </style>
+  <link href="https://fonts.googleapis.com/css?family=Varela Round" rel="stylesheet">
+  <title>Temperature and Humidity</title>
+  <link href="https://zippy-pie-5f40f4.netlify.app/style.css" rel="stylesheet">
 </head>
-<body>
-  <h2>NITHUB IOT ECOSYSTEM</h2>
-  <p>
-    <i class="fas fa-thermometer-half" style="color:#059e8a;"></i> 
-    <span class="dht-labels">Temperature</span> 
+<body class="colorLight">
+  <img class ="logo" src="https://nithub.unilag.edu.ng/wp-content/uploads/2022/01/Nithub_Nithub-Dark-Blue.png" height="40px" width="112px"/>
+  <h2>NITHUB IOT <strong>ECOSYSTEM</strong></h2>
+  <div class="temp">
+    <div class="icon-div">
+      <i class="fas fa-thermometer-half" style="color:rgba(0, 0, 200, 0.6);"></i>
+      <span class="dht-labels">Temperature</span> 
+    </div>
     <span id="temperature">%TEMPERATURE%</span>
     <sup class="units">&deg;C</sup>
-  </p>
-  <p>
-    <i class="fas fa-tint" style="color:#00add6;"></i> 
-    <span class="dht-labels">Humidity</span>
+  </div>
+  <div class="humi">
+    <div class="icon-div">
+      <i class="fas fa-tint" style="color:rgba(0, 0, 200, 0.6);"></i> 
+      <span class="dht-labels">Humidity</span>
+    </div>
     <span id="humidity">%HUMIDITY%</span>
     <sup class="units">&percnt;</sup>
-  </p>
-  %BUTTONPLACEHOLDER%
-  
+  </div>
+  <div class = "circle"></div>
+  <button class="buttonLight" type="button" class ="btn"></button>
 </body>
 <script>
-setInterval(function ( ) {
+  let theme = true;
+  const body = document.querySelector('body');
+  const icon = document.querySelectorAll('i');
+  const image = document.querySelector('img');
+  function dark(){
+    body.classList.add('colorDark');
+    body.classList.remove('colorLight');
+    icon[0].style.color = "rgba(78, 27, 196, 0.8)";
+    icon[1].style.color = "rgba(78, 27, 196, 0.8)";
+    image.src = "https://nithub.unilag.edu.ng/wp-content/uploads/2022/01/Nithub_Nithub-White-300x108.png";
+  }
+  function light(){
+    body.classList.remove('colorDark');
+    body.classList.add('colorLight');
+    icon[0].style.color = "rgba(0, 0, 200, 0.6)";
+    icon[1].style.color = "rgba(0, 0, 200, 0.6)";
+    image.src = "https://nithub.unilag.edu.ng/wp-content/uploads/2022/01/Nithub_Nithub-Dark-Blue.png";
+  }
+  
+  document.querySelector("button").addEventListener('click', function(){
+    document.querySelector("button").classList.toggle('buttonDark');
+    document.querySelector("button").classList.toggle('buttonLight');
+    if(theme){
+      dark();
+      theme = false;
+    }else{
+      light();
+      theme = true;
+    }
+  })
+
+  setInterval(function ( ) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -102,13 +118,6 @@ setInterval(function ( ) {
   xhttp.open("GET", "/humidity", true);
   xhttp.send();
 }, 10000 ) ;
-
-function toggleCheckbox(element) {
-  var xhr = new XMLHttpRequest();
-  if(element.checked){ xhr.open("GET", "/update?relay="+element.id+"&state=1", true); }
-  else { xhr.open("GET", "/update?relay="+element.id+"&state=0", true); }
-  xhr.send();
-}
 </script>
 </html>
 )rawliteral";
